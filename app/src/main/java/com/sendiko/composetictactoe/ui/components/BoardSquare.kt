@@ -22,6 +22,7 @@ fun BoardSquare(
     row: Int,
     column: Int,
     playerTurn: Players,
+    enabled: Boolean,
     onClick: (onBoardClick: BoardData) -> Unit,
 ) {
     Card(
@@ -29,7 +30,7 @@ fun BoardSquare(
     ) {
         IconButton(
             modifier = Modifier.fillMaxSize(),
-            enabled = board[row][column] == ' ',
+            enabled = enabled,
             onClick = {
                 Log.i("BoardSquare", "onClick: $board")
                 onClick(
