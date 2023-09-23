@@ -9,27 +9,35 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.sendiko.composetictactoe.ui.screens.history.MatchData
 import com.sendiko.composetictactoe.ui.theme.Typography
 
 @Composable
 fun ScoreBoard(
+    modifier: Modifier = Modifier,
     matchData: MatchData
 ) {
-    Card {
+    Card(
+        modifier = modifier
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
+                modifier = Modifier.weight(2f),
                 text = matchData.playerOne,
                 style = Typography.bodyMedium
             )
-            Row {
+            Row(
+                modifier = Modifier.weight(1f),
+                horizontalArrangement = Arrangement.Center
+            ) {
                 Text(
                     text = matchData.playerOneScore.toString(),
                     style = Typography.bodyMedium
@@ -44,8 +52,10 @@ fun ScoreBoard(
                 )
             }
             Text(
+                modifier = Modifier.weight(2f),
                 text = matchData.playerTwo,
-                style = Typography.bodyMedium
+                style = Typography.bodyMedium,
+                textAlign = TextAlign.End
             )
         }
     }
