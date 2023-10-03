@@ -95,6 +95,17 @@ fun HomeScreen(
                         .padding(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Text(modifier = Modifier.weight(1f), text = "Welcome to Compose TicTacToe!", fontSize = 20.sp)
+                    IconButton(onClick = { onNavigate(Routes.HistoryScreen.route) }) {
+                        Icon(imageVector = Icons.Default.History, contentDescription = "History")
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Text(modifier = Modifier.weight(1f), text = "Player one name")
                     OutlinedTextField(
                         modifier = Modifier.weight(2f),
