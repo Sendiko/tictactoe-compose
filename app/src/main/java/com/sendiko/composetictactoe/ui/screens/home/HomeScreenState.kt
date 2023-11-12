@@ -10,6 +10,8 @@ data class HomeScreenState(
     val playerTurn: Players = PlayerOne,
     val isWinning: Players?= null,
     val isDraw: Boolean = false,
+    val dialog: Int = 0,
+    val isShowingDropdown: Boolean = false,
     val board: MutableList<MutableList<Char>> = mutableListOf(
         mutableListOf(' ', ' ', ' '),
         mutableListOf(' ', ' ', ' '),
