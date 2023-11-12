@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -39,9 +40,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sendiko.composetictactoe.R
 import com.sendiko.composetictactoe.ui.components.BoardSquare
+import com.sendiko.composetictactoe.ui.components.CustomDialog
+import com.sendiko.composetictactoe.ui.components.CustomDropDown
 import com.sendiko.composetictactoe.ui.components.Greetings
+import com.sendiko.composetictactoe.ui.components.PRIVACY_POLICY
 import com.sendiko.composetictactoe.ui.components.ScoreBoard
+import com.sendiko.composetictactoe.ui.components.poweredBy
 import com.sendiko.composetictactoe.ui.screens.history.MatchData
 import com.sendiko.composetictactoe.ui.screens.home.Players.*
 import com.sendiko.composetictactoe.ui.screens.routes.Routes
@@ -70,14 +76,54 @@ fun HomeScreen(
                             )
                         }
                     )
+                    IconButton(
+                        onClick = { onEvent(HomeScreenEvent.SetShowDropDown(!state.isShowingDropdown)) },
+                        content = {
+                            Icon(imageVector = Icons.Default.MoreVert, contentDescription = "More")
+                        }
+                    )
+                    CustomDropDown(
+                        expanded = state.isShowingDropdown,
+                        items = listOf("Privacy Policy", "About Us"),
+                        onDismissRequest = { onEvent(HomeScreenEvent.SetShowDropDown(!state.isShowingDropdown)) },
+                        onClickAction = {
+                            onEvent(HomeScreenEvent.SetShowDropDown(!state.isShowingDropdown))
+                            when(it){
+                                0 -> onEvent(HomeScreenEvent.SetDialog(1))
+                                1 -> onEvent(HomeScreenEvent.SetDialog(2))
+                            }
+                        }
+                    )
                 }
             )
         }
     ) { values ->
-        var pon by rememberSaveable {
+        when (state.dialog) {
+            1 -> CustomDialog(
+                title = "Privacy Policy",
+                description = PRIVACY_POLICY,
+                onConfirmAction = { onEvent(HomeScreenEvent.SetDialog(0)) },
+                onDismissRequest = {
+                    onEvent(HomeScreenEvent.SetDialog(0))
+                }
+            )
+
+            2 -> {
+                CustomDialog(
+                    title = "About Us",
+                    image = R.drawable.logo_long,
+                    description = poweredBy,
+                    onConfirmAction = { onEvent(HomeScreenEvent.SetDialog(0)) },
+                    onDismissRequest = {
+                        onEvent(HomeScreenEvent.SetDialog(0))
+                    }
+                )
+            }
+        }
+        var playerOneName by rememberSaveable {
             mutableStateOf("")
         }
-        var ptn by rememberSaveable {
+        var playerTwoName by rememberSaveable {
             mutableStateOf("")
         }
         if (state.playerOneName == "" && state.playerTwoName == "") {
@@ -109,11 +155,11 @@ fun HomeScreen(
                     Text(modifier = Modifier.weight(1f), text = "Player one name")
                     OutlinedTextField(
                         modifier = Modifier.weight(2f),
-                        value = pon,
+                        value = playerOneName,
                         singleLine = true,
                         shape = RoundedCornerShape(100),
                         onValueChange = {
-                            pon = it
+                            playerOneName = it
                         },
                     )
                 }
@@ -126,21 +172,21 @@ fun HomeScreen(
                     Text(modifier = Modifier.weight(1f), text = "Player two name")
                     OutlinedTextField(
                         modifier = Modifier.weight(2f),
-                        value = ptn,
+                        value = playerTwoName,
                         singleLine = true,
                         shape = RoundedCornerShape(100),
                         onValueChange = {
-                            ptn = it
+                            playerTwoName = it
                         }
                     )
                 }
 
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = pon != "" && ptn != "",
+                    enabled = playerOneName != "" && playerTwoName != "",
                     onClick = {
-                        onEvent(HomeScreenEvent.OnPlayerOneNameInput(pon))
-                        onEvent(HomeScreenEvent.OnPlayerTwoNameInput(ptn))
+                        onEvent(HomeScreenEvent.OnPlayerOneNameInput(playerOneName))
+                        onEvent(HomeScreenEvent.OnPlayerTwoNameInput(playerTwoName))
                         coroutineScope.launch { sheetState.hide() }
                     },
                     content = {
