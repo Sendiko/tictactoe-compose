@@ -149,6 +149,15 @@ class HomeScreenViewModel(app: Application) : ViewModel() {
             is HomeScreenEvent.OnPlayerTwoNameInput -> _state.update {
                 it.copy(playerTwoName = event.playerTwoName)
             }
+
+            is HomeScreenEvent.SetDialog -> _state.update {
+                it.copy(dialog = event.dialog)
+            }
+
+
+            is HomeScreenEvent.SetShowDropDown -> _state.update {
+                it.copy(isShowingDropdown = event.isShowing)
+            }
         }
     }
 }
